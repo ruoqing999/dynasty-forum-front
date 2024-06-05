@@ -116,7 +116,7 @@
               this.user = res.data;
             })
             .catch(err => {
-              this.$message.error(err.desc);
+              this.$message.error(err.msg);
             });
       },
 
@@ -135,7 +135,7 @@
                 this.editMode = false;
               })
               .catch((err) => {
-                this.$message.error(err.desc);
+                this.$message.error(err.msg);
               });
         } else {
           this.bindEmailVisible = true;
@@ -152,7 +152,7 @@
                 this.editMode = false;
               })
               .catch((err) => {
-                this.$message.error(err.desc);
+                this.$message.error(err.msg);
               });
         } else {
           this.bindPhoneVisible = true;

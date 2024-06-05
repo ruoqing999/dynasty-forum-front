@@ -53,6 +53,15 @@ const state = {
     taskNotifyCount: 0,
     // 南生运营域名
     manageDomain: 'http://manage-test.nanshengbbs.top',
+    setToken(token) {
+        localStorage.setItem("token", token)
+    },
+    getToken() {
+        return localStorage.getItem("token")
+    },
+    removeToken() {
+        localStorage.removeItem("token")
+    },
     // 国际化方法
     translate: function (val) {
         // 国际化方法

@@ -2,7 +2,7 @@
   <div id="left-buttons">
     <!-- 点赞 -->
     <div class="like-div">
-      <a-badge class="badge" :count="data.likeCount" :overflow-count="999" :number-style="data.isLike ? {
+      <a-badge class="badge" :count="data.approves" :overflow-count="999" :number-style="data.like ? {
         backgroundColor: $store.state.themeColor,
         boxShadow: '0 0 0 1px ' + $store.state.themeColor+ ' inset',
       } : {
@@ -11,14 +11,14 @@
       }">
         <div @click="likeAction" class="like-icon-container" style="background: #fff;">
           <i class="iconfont icon-like"
-             :style="data.isLike ? 'color:' + $store.state.themeColor : 'color: #8a919f;'"></i>
+             :style="data.like ? 'color:' + $store.state.themeColor : 'color: #8a919f;'"></i>
         </div>
       </a-badge>
     </div>
 
     <!-- 评论 -->
     <div class="comment-div">
-      <a-badge class="badge" :count="data.commentCount" :overflow-count="999" :number-style="{
+      <a-badge class="badge" :count="data.comments" :overflow-count="999" :number-style="{
         backgroundColor: '#c2c8d1',
         boxShadow: '0 0 0 1px #c2c8d1 inset',
       }">
@@ -35,8 +35,8 @@
 
 <script>
 
-import userService from "@/service/userService";
-import articleService from "@/service/articleService";
+import postService from "@/service/postService";
+import userPostService from "@/service/userPostService";
 
 export default {
 
@@ -48,31 +48,32 @@ export default {
 
   methods: {
     // 获取文章一些统计数据
-    getArticleCountById() {
-      articleService.getArticleCountById({id: this.$route.params.id})
+    getPostCount() {
+      console.log("userId", this.$store.state.userId)
+      postService.getPostCount({postId: this.$route.params.id, userId: this.$store.state.userId})
           .then((res) => {
             this.data = res.data;
-            this.$emit("articleCommentCountFn", res.data.commentCount);
+            this.$emit("articleCommentCountFn", res.data.comments);
           })
           .catch(err => {
-            // this.$message.error(err.desc);
+            // this.$message.error(err.msg);
           });
     },
 
     // 点赞/取消点赞
     likeAction() {
-      userService.updateLikeState({articleId: this.$route.params.id})
+      userPostService.userPost({postId: this.$route.params.id, type: 2})
           .then(() => {
-            this.getArticleCountById();
+            this.getPostCount();
           })
           .catch(err => {
-            this.$message.error(err.desc);
+            this.$message.error(err.msg);
           });
     },
   },
 
   mounted() {
-    this.getArticleCountById();
+    this.getPostCount();
   }
 };
 </script>

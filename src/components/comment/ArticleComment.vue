@@ -10,10 +10,10 @@
       <span style="color:#9499a0; padding: 0 15px 0 5px">{{ articleCommentCount }}</span>
       <span>
         <a-radio-group :default-value="sortRule" size="small" @change="onChange">
-          <a-radio-button value="hottest">
+          <a-radio-button value="1">
             {{ $t("common.hottest") }}
           </a-radio-button>
-          <a-radio-button value="newest">
+          <a-radio-button value="2">
             {{ $t("common.newest") }}
           </a-radio-button>
         </a-radio-group>
@@ -49,7 +49,7 @@
       return {
         comments: [],
         // 排序规则（默认最热）
-        sortRule: 'hottest',
+        sortRule: 1,
       };
     },
 
@@ -61,12 +61,13 @@
 
       // 获取文章的评论信息
       getCommentByArticleId() {
-        commentService.getCommentByArticleId({articleId: this.$route.params.id, sortRule: this.sortRule})
+        commentService.listComment({postId: this.$route.params.id, sortType: this.sortRule})
             .then((res) => {
               this.comments = res.data;
+              this.$emit("refresh");
             })
             .catch(err => {
-              this.$message.error(err.desc);
+              this.$message.error(err.msg);
             });
       },
 

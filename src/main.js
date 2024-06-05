@@ -45,7 +45,6 @@ const app = createApp(App);
 app.config.globalProperties.$utils = utils;
 app.config.globalProperties.$moment = moment;
 app.config.globalProperties.$t = store.state.translate.bind(store.state);
-
 app
     .use(Antd)
     .use(store)

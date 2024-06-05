@@ -1,6 +1,15 @@
 import axios from "axios";
 
 export default {
+
+  listComment(params) {
+    return new Promise((resolve, reject) => {
+      axios.get("/api/comment/listComment", {params})
+        .then((res) => resolve(res))
+        .catch((err) => reject(err));
+    });
+  },
+
   // 获取文章的评论信息
   getCommentByArticleId(params) {
     return new Promise((resolve, reject) => {
@@ -20,7 +29,7 @@ export default {
   // 创建评论
   createComment(data) {
     return new Promise((resolve, reject) => {
-      axios.post("/api/bbs/comment/create", data)
+      axios.post("/api/comment", data)
           .then((res) => resolve(res))
           .catch((err) => reject(err));
     });

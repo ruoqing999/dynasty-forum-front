@@ -1,38 +1,6 @@
 <template>
   <div class="footer-buttons">
     <BackTop/>
-    <a-tooltip placement="left">
-      <template #title>
-        {{ $t("common.feedback") }}
-      </template>
-      <div @click="createFeedback" class="feedback-icon-container" style="background: #fff">
-        <i class="iconfont icon-bug" style="color: red"></i>
-      </div>
-    </a-tooltip>
-    <a-tooltip placement="left">
-      <template #title>
-        {{ $t("common.chat") }}
-      </template>
-      <div @click="routerChat" class="chat-icon-container" style="background: #fff">
-        <i class="iconfont icon-chat" style="color: #2d9d92"></i>
-      </div>
-    </a-tooltip>
-    <a-tooltip placement="left">
-      <template #title>
-        {{ $t("common.githubCode") }}
-      </template>
-      <div @click="routerGithub" class="github-icon-container" style="background: #fff">
-        <i class="iconfont icon-GitHub" style="color: #000"></i>
-      </div>
-    </a-tooltip>
-    <a-tooltip placement="left">
-      <template #title>
-        {{ $t("common.giteeCode") }}
-      </template>
-      <div @click="routerGitee" class="gitee-icon-container" style="background: #fff">
-        <i class="iconfont icon-gitee" style="color: #c71d23"></i>
-      </div>
-    </a-tooltip>
   </div>
 </template>
 

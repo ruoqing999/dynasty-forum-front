@@ -1,22 +1,22 @@
 <template>
   <div id="personal-info-display">
     <a-tabs :default-active-key="defaultActiveKey" @change="changeTab" v-model:activeKey="activeKey">
-      <a-tab-pane key="dynamic">
-        <template #tab>
-          <span slot="tab">
-            <i class="iconfont icon-dynamic"></i>
-            {{ $t("common.dynamic") }}
-          </span>`
-        </template>
-        <!-- 动态列表 -->
-        <Dynamic
-            v-if="isDynamicTab"
-            :spinning="dynamicSpinning"
-            :finish="finish"
-            :hasNext="hasNext"
-            :total="dynamicTotal"
-            :data="dynamicData"/>
-      </a-tab-pane>
+<!--      <a-tab-pane key="dynamic">-->
+<!--        <template #tab>-->
+<!--          <span slot="tab">-->
+<!--            <i class="iconfont icon-dynamic"></i>-->
+<!--            {{ $t("common.dynamic") }}-->
+<!--          </span>`-->
+<!--        </template>-->
+<!--        &lt;!&ndash; 动态列表 &ndash;&gt;-->
+<!--        <Dynamic-->
+<!--            v-if="isDynamicTab"-->
+<!--            :spinning="dynamicSpinning"-->
+<!--            :finish="finish"-->
+<!--            :hasNext="hasNext"-->
+<!--            :total="dynamicTotal"-->
+<!--            :data="dynamicData"/>-->
+<!--      </a-tab-pane>-->
       <a-tab-pane key="article">
         <template #tab>
           <span slot="tab">
@@ -36,21 +36,21 @@
             @refresh="articleRefresh"
             style="background: #fff;"/>
       </a-tab-pane>
-      <a-tab-pane key="follow">
-        <template #tab>
-          <span slot="tab">
-            <i class="iconfont icon-follow"></i>
-            {{ $t("common.follow") + ' ' + Number(followedTotal + fanTotal) }}
-          </span>
-        </template>
-        <FollowTabs
-            v-if="isFollowTab"
-            ref="child"
-            :followedTotal="followedTotal"
-            :fanTotal="fanTotal"
-            :userId="userId"
-            @getFollowCount="getFollowCount"/>
-      </a-tab-pane>
+<!--      <a-tab-pane key="follow">-->
+<!--        <template #tab>-->
+<!--          <span slot="tab">-->
+<!--            <i class="iconfont icon-follow"></i>-->
+<!--            {{ $t("common.follow") + ' ' + Number(followedTotal + fanTotal) }}-->
+<!--          </span>-->
+<!--        </template>-->
+<!--        <FollowTabs-->
+<!--            v-if="isFollowTab"-->
+<!--            ref="child"-->
+<!--            :followedTotal="followedTotal"-->
+<!--            :fanTotal="fanTotal"-->
+<!--            :userId="userId"-->
+<!--            @getFollowCount="getFollowCount"/>-->
+<!--      </a-tab-pane>-->
       <a-tab-pane key="like">
         <template #tab>
           <span slot="tab">
@@ -65,6 +65,7 @@
             :hasNext="hasNext"
             :data="likeData"
             :service="articleService"
+            :isUserCenter="true"
             @refresh="likeRefresh"
             style="background: #fff;"/>
       </a-tab-pane>
@@ -79,6 +80,7 @@ import FollowTabs from "@/components/user/FollowTabs";
 import userService from "@/service/userService";
 import dynamicService from "@/service/dynamicService";
 import Dynamic from "@/components/user/Dynamic";
+import postService from "@/service/postService";
 
 export default {
   name: "",
@@ -91,7 +93,7 @@ export default {
 
   data() {
     return {
-      defaultActiveKey: 'dynamic',
+      defaultActiveKey: 'article',
       // 是否在动态tab下
       isDynamicTab: true,
       // 是否在文章tab下
@@ -113,7 +115,7 @@ export default {
       finish: false,
       // 加载中...
       dynamicSpinning: true,
-      params: {currentPage: 1, pageSize: 10},
+      params: {pageNum: 1, pageSize: 10},
       // 发表文章总数
       writeArticleTotal: 0,
       // 点赞文章总数
@@ -129,9 +131,9 @@ export default {
   methods: {
     // 加载更多（滚动加载）
     loadMore() {
-      this.params.currentPage++;
+      this.params.pageNum++;
       if (this.isDynamicTab) {
-        this.getDynamicList(this.params, true);
+        // this.getDynamicList(this.params, true);
       }
       if (this.isLikeTab) {
         this.getLikesArticle(this.params, true);
@@ -151,24 +153,24 @@ export default {
       }
       userService.getUserOperateCount(tempParams)
           .then(res => {
-            this.writeArticleTotal = res.data.articleCount;
-            this.likeArticleTotal = res.data.likeCount;
+            this.writeArticleTotal = res.data.postCount;
+            this.likeArticleTotal = res.data.approveCount;
             this.followedTotal = res.data.followCount;
             this.fanTotal = res.data.fanCount;
           })
           .catch(err => {
-            this.$message.error(err.desc);
+            this.$message.error(err.msg);
           });
     },
 
     // 获取动态
     getDynamicList(params, isLoadMore) {
       if (!isLoadMore) {
-        this.params.currentPage = 1;
+        this.params.pageNum = 1;
       }
       this.finish = false;
       let tempParams = {};
-      tempParams.currentPage = params.currentPage
+      tempParams.pageNum = params.pageNum
       tempParams.pageSize = 15;
       tempParams.userId = this.userId;
       dynamicService.getDynamicList(tempParams)
@@ -185,17 +187,18 @@ export default {
           })
           .catch(err => {
             this.finish = true;
-            this.$message.error(err.desc);
+            this.$message.error(err.msg);
           });
     },
 
     // 获取个人发布的文章（所有）
     getPersonalArticles(params, isLoadMore) {
       if (!isLoadMore) {
-        this.params.currentPage = 1;
+        this.params.pageNum = 1;
       }
       this.finish = false;
-      params.createUser = this.userId;
+      params.userId = this.userId;
+      params.isSelf = 1;
       // this.$delete(params, 'likeUser');
       params.likeUser = undefined;
       // 不是管理员
@@ -216,20 +219,20 @@ export default {
           })
           .catch(err => {
             this.finish = true;
-            this.$message.error(err.desc);
+            this.$message.error(err.msg);
           });
     },
 
     // 获取点赞过的文章
     getLikesArticle(params, isLoadMore) {
       if (!isLoadMore) {
-        this.params.currentPage = 1;
+        this.params.pageNum = 1;
       }
       this.finish = false;
-      params.likeUser = this.userId;
+      params.userId = this.userId;
       // this.$delete(params, 'createUser');
       params.createUser = undefined;
-      articleService.getLikesArticle(params)
+      postService.listApprovePost(params)
           .then(res => {
             if (isLoadMore) {
               this.likeData = this.likeData.concat(res.data.list);
@@ -242,7 +245,7 @@ export default {
           })
           .catch(err => {
             this.finish = true;
-            this.$message.error(err.desc);
+            this.$message.error(err.msg);
           });
     },
 
@@ -254,18 +257,18 @@ export default {
             this.fanTotal = res.data.fanCount;
           })
           .catch(err => {
-            this.$message.error(err.desc);
+            this.$message.error(err.msg);
           });
     },
 
     // 刷新列表
     articleRefresh() {
-      this.params = {currentPage: 1, pageSize: 10};
+      this.params = {pageNum: 1, pageSize: 10};
       this.getPersonalArticles(this.params);
       this.getLikesArticle(this.params);
     },
     likeRefresh() {
-      this.params = {currentPage: 1, pageSize: 10};
+      this.params = {pageNum: 1, pageSize: 10};
       this.getLikesArticle(this.params);
     },
 
@@ -280,7 +283,7 @@ export default {
         this.isLikeTab = false;
         this.isFollowTab = false;
         this.hasNext = true;
-        this.getDynamicList(this.params);
+        // this.getDynamicList(this.params);
         // 解決和mounted()滚动加载重复的问题
         if (!isFirst) {
           console.log("???????????????")
@@ -353,7 +356,7 @@ export default {
   },
 
   created() {
-    this.defaultActiveKey = this.$route.params.userCenterTab === undefined ? 'dynamic' : this.$route.params.userCenterTab;
+    this.defaultActiveKey = this.$route.params.userCenterTab === undefined ? 'article' : this.$route.params.userCenterTab;
     this.changeTab(this.defaultActiveKey, true);
   }
 

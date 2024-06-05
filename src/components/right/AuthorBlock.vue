@@ -3,10 +3,10 @@
     <div class="user" @click="routerUserCenter(data.id)">
       <div>
         <a-avatar :size="46" class="avatar"
-                  :src="data.picture ? data.picture : require('@/assets/img/default_avatar.png')"/>
+                  :src="data.avatarUrl ? data.avatarUrl : require('@/assets/img/default_avatar.png')"/>
       </div>
       <div class="intro">
-        <span class="name" style="font-size: 17px;">{{ data.name }} </span>
+        <span class="name" style="font-size: 17px;">{{ data.nickName + " " }} </span>
         <img :src="require('@/assets/img/level/' + data.level + '.svg')" alt="" @click.stop="routerBook"/>
         <div v-if="data.intro">{{ data.intro }}</div>
       </div>
@@ -55,7 +55,7 @@
             })
             .catch(err => {
               this.finish = true;
-              this.$message.error(err.desc);
+              // this.$message.error(err.msg);
             });
       },
 

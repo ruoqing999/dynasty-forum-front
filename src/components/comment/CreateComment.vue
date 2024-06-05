@@ -18,13 +18,14 @@
 
 <script>
 import commentService from "@/service/commentService";
+import postService from "@/service/postService";
 import store from "@/store";
 
 export default {
   name: "CreateComment",
 
   props: {
-    preId: {type: Number, default: 0},
+    preId: { type: Number, default: 0 }
   },
 
   data() {
@@ -61,11 +62,11 @@ export default {
       if (this.$store.state.isLogin) {
         this.$refs.form.validateFields().then(values => {
           if (this.preId) {
-            this.data.preId = this.preId;
+            this.data.parentId = this.preId;
           } else {
-            this.data.preId = 0;
+            this.data.parentId = 0;
           }
-          this.data.articleId = this.$route.params.id;
+          this.data.postId = this.$route.params.id;
           this.data.content = values.content;
           this.createComment();
         });
@@ -82,10 +83,11 @@ export default {
             // 清空表单
             this.$refs.form.resetFields();
             this.$emit("refresh");
+            console.log("没调用???")
           })
         .catch(err => {
-            console.log("错误")
-            this.$message.error(err.desc);
+            console.log("错误", err)
+            this.$message.error(err.msg);
           });
     }
   },

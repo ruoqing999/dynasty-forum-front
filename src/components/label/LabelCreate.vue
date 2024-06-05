@@ -94,7 +94,7 @@
               this.refresh();
             })
             .catch(err => {
-              this.$message.error(err.desc);
+              this.$message.error(err.msg);
             });
       },
 
@@ -106,7 +106,7 @@
               this.refresh();
             })
             .catch(err => {
-              this.$message.error(err.desc);
+              this.$message.error(err.msg);
             });
       },
 

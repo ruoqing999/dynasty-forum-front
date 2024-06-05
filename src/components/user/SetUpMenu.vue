@@ -11,11 +11,11 @@
         <UserOutlined />
         <span>{{ $t('common.personalInformation') }}</span>
       </a-menu-item>
-      <a-menu-item key="account">
-        <!-- <a-icon type="setting" /> -->
-        <SettingOutlined />
-        <span>{{ $t('common.accountSettings') }}</span>
-      </a-menu-item>
+<!--      <a-menu-item key="account">-->
+<!--        &lt;!&ndash; <a-icon type="setting" /> &ndash;&gt;-->
+<!--        <SettingOutlined />-->
+<!--        <span>{{ $t('common.accountSettings') }}</span>-->
+<!--      </a-menu-item>-->
     </a-menu>
   </div>
 </template>

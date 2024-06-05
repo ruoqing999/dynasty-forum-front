@@ -16,30 +16,30 @@
                       :placeholder="$t('common.fillInYourUsername')"/>
             </a-form-item>
             <!-- 职位 -->
-            <a-form-item has-feedback name="position" :label="$t('common.position')">
-              <a-input v-model:value="ruleForm.position"
-                      :suffix="ruleForm.positionNum + '/50'"
-                      @change="commonChange"
-                      :maxLength="50"
-                      :placeholder="$t('common.fillInYourPosition')"/>
-            </a-form-item>
+<!--            <a-form-item has-feedback name="position" :label="$t('common.position')">-->
+<!--              <a-input v-model:value="ruleForm.position"-->
+<!--                      :suffix="ruleForm.positionNum + '/50'"-->
+<!--                      @change="commonChange"-->
+<!--                      :maxLength="50"-->
+<!--                      :placeholder="$t('common.fillInYourPosition')"/>-->
+<!--            </a-form-item>-->
             <!-- 公司 -->
-            <a-form-item has-feedback name="company" :label="$t('common.company')">
-              <a-input v-model:value="ruleForm.company"
-                      :suffix="ruleForm.companyNum + '/50'"
-                      @change="commonChange"
-                      :maxLength="50"
-                      :placeholder="$t('common.fillInYourCompany')"/>
-            </a-form-item>
+<!--            <a-form-item has-feedback name="company" :label="$t('common.company')">-->
+<!--              <a-input v-model:value="ruleForm.company"-->
+<!--                      :suffix="ruleForm.companyNum + '/50'"-->
+<!--                      @change="commonChange"-->
+<!--                      :maxLength="50"-->
+<!--                      :placeholder="$t('common.fillInYourCompany')"/>-->
+<!--            </a-form-item>-->
             <!-- 个人主页 -->
-            <a-form-item has-feedback name="homePage" :label="$t('common.homePage')">
-              <a-input v-model:value="ruleForm.homePage"
-                      :suffix="ruleForm.homePageNum + '/100'"
-                      @change="commonChange"
-                      :maxLength="100"
-                      :placeholder="$t('common.fillInYourHomePage')"
-                      class="homePage"/>
-            </a-form-item>
+<!--            <a-form-item has-feedback name="homePage" :label="$t('common.homePage')">-->
+<!--              <a-input v-model:value="ruleForm.homePage"-->
+<!--                      :suffix="ruleForm.homePageNum + '/100'"-->
+<!--                      @change="commonChange"-->
+<!--                      :maxLength="100"-->
+<!--                      :placeholder="$t('common.fillInYourHomePage')"-->
+<!--                      class="homePage"/>-->
+<!--            </a-form-item>-->
             <!-- 个人介绍 -->
             <a-form-item has-feedback name="intro" :label="$t('common.selfIntro')">
               <a-textarea v-model:value="ruleForm.intro"
@@ -124,8 +124,8 @@
                 return Promise.resolve();
               })
               .catch(err => {
-                // callback(err.desc);
-                return Promise.reject(err.desc);
+                // callback(err.msg);
+                return Promise.reject(err.msg);
               });
         }
       };
@@ -183,8 +183,8 @@
         userService.getUserInfo({userId: this.ruleForm.userId})
             .then(res => {
               this.spinning = false;
-              this.ruleForm.username = res.data.name,
-              this.ruleForm.userNameNum = res.data.name.length;
+              this.ruleForm.username = res.data.nickName,
+              this.ruleForm.userNameNum = res.data.nickName.length;
 
               this.ruleForm.position = res.data.position ? res.data.position : '';
               this.ruleForm.positionNum = res.data.position ? res.data.position.length : 0;
@@ -199,21 +199,22 @@
               this.ruleForm.introNum = res.data.intro ? res.data.intro.length : 0;
 
               this.ruleForm.orgId = res.data.orgId;
+              this.$store.state.picture = res.data.avatarUrl;
             })
             .catch(err => {
-              this.$message.error(err.desc);
+              this.$message.error(err.msg);
             });
       },
 
       // 更新用户基本信息
       updateUserBasicInfo(data) {
-        userService.updateUserBasicInfo(data)
+        userService.put(data)
             .then(res => {
               this.$message.success(this.$t('common.saveSuccessed'));
               this.getUserInfo();
             })
             .catch(err => {
-              this.$message.error(err.desc);
+              this.$message.error(err.msg);
             });
       },
 
@@ -243,13 +244,10 @@
         //   }
         // });
         const data = {
-          // id: this.ruleForm.userId,
-          name: this.ruleForm.username,
-          position: this.ruleForm.position,
-          company: this.ruleForm.company,
+          userId: this.ruleForm.userId,
+          nickName: this.ruleForm.username,
           homePage: this.ruleForm.homePage,
           intro: this.ruleForm.intro,
-          orgId: this.ruleForm.orgId,
         };
         this.updateUserBasicInfo(data);
       },

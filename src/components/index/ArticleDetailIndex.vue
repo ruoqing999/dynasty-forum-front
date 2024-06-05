@@ -118,7 +118,7 @@
 
       refresh() {
         // 获取文章一些统计数据
-        this.$refs.child.getArticleCountById()
+        this.$refs.child.getPostCount()
       },
 
       articleCommentCountFn(commentCount) {

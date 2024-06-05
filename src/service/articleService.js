@@ -12,7 +12,7 @@ export default {
     // 获取个人发布的文章（所有）
     getPersonalArticles(params) {
         return new Promise((resolve, reject) => {
-            axios.get("/api/bbs/article/getPersonalArticles", {params})
+            axios.get("/api/user/pagePost", {params})
                 .then((res) => resolve(res))
                 .catch((err) => reject(err));
         });

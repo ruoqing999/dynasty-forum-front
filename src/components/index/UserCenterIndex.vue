@@ -87,7 +87,7 @@ export default {
                 params: { pathMatch: this.$route.path.substring(1).split('/') },
               })
             } else {
-              this.$message.error(err.desc);
+              // this.$message.error(err.msg);
             }
           });
     },

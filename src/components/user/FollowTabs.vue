@@ -109,14 +109,14 @@ export default {
           })
           .catch(err => {
             this.finish = true;
-            this.$message.error(err.desc);
+            this.$message.error(err.msg);
           });
     },
 
     // 刷新列表
     refresh() {
       this.params = {currentPage: 1, pageSize: 10};
-      this.getFollowUsers(this.params);
+      // this.getFollowUsers(this.params);
       this.$emit("getFollowCount");
     },
 
@@ -138,7 +138,7 @@ export default {
   },
 
   mounted() {
-    this.getFollowUsers(this.params);
+    // this.getFollowUsers(this.params);
     // 监听滚动，做滚动加载
     this.$utils.scroll.call(this, document.querySelector('#app'));
   },

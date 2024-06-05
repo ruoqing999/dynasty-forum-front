@@ -24,7 +24,7 @@
                     @initArticles="initArticles"/>
               </div>
               <!-- 文章列表（管理员） -->
-              <FrontPageArticle v-if="$store.state.isManage && !spinning"
+              <FrontPageArticle v-if="$store.state.userId === 1 && !spinning"
                                 :finish="finish"
                                 :hasNext="hasNext"
                                 :data="listData"
@@ -34,7 +34,7 @@
                                 @refresh="refresh"
                                 style="background: #fff;"/>
               <!-- 文章列表（普通） -->
-              <FrontPageArticle v-if="!$store.state.isManage && !spinning"
+              <FrontPageArticle v-if="$store.state.userId !==1 && !spinning"
                                 :finish="finish"
                                 :hasNext="hasNext"
                                 :data="listData"
@@ -54,10 +54,10 @@
               <a-col :span="24" style="height: 10px;"/>
             </a-row>
             <!-- 最新评论 -->
-            <LatestComment style="background: #fff;"/>
-            <a-row>
-              <a-col :span="24" style="height: 10px;"/>
-            </a-row>
+<!--            <LatestComment style="background: #fff;"/>-->
+<!--            <a-row>-->
+<!--              <a-col :span="24" style="height: 10px;"/>-->
+<!--            </a-row>-->
             <!-- 友情捐赠 -->
             <FriendDonate style="background: #fff;"/>
             <a-row>
@@ -86,6 +86,7 @@ import CustomEmpty from "@/components/utils/CustomEmpty";
 import LatestComment from "@/components/right/LatestComment";
 import FriendDonate from "@/components/right/FriendDonate";
 import ArticleCheck from "@/components/article/ArticleCheck";
+import postService from "@/service/postService";
 
 export default {
   components: {
@@ -108,7 +109,7 @@ export default {
       listData: [],
       hasNext: true,
       finish: false,
-      params: {currentPage: 1, pageSize: 12},
+      params: {pageNum: 1, pageSize: 10},
       searchContent: '',
     };
   },
@@ -116,7 +117,7 @@ export default {
   methods: {
     // 加载更多（滚动加载）
     loadMore() {
-      this.params.currentPage++;
+      this.params.pageNum++;
       if (this.$store.state.articleCheck === 'enable') {
         this.getArticleList(this.params, true);
       }
@@ -153,30 +154,47 @@ export default {
     // 获取文章列表信息
     getArticleList(params, isLoadMore) {
       if (!isLoadMore) {
-        this.params.currentPage = 1;
+        this.params.pageNum = 1;
       }
       this.finish = false;
-      articleService.getArticleList(params)
-          .then(res => {
-            if (isLoadMore) {
-              this.listData = this.listData.concat(res.data.list);
-              this.hasNext = res.data.list.length !== 0;
-            } else {
-              this.listData = res.data.list;
-            }
-            this.spinning = false;
-            this.finish = true;
-          })
-          .catch(err => {
-            this.finish = true;
-            this.$message.error(err.desc);
-          });
+      postService.pagePost(params)
+        .then(res => {
+          if (isLoadMore) {
+            this.listData = this.listData.concat(res.data.list);
+            this.hasNext = res.data.list.length !== 0;
+          } else {
+            this.listData = res.data.list;
+          }
+          this.spinning = false;
+          this.finish = true;
+        })
+        .catch(err => {
+          this.finish = true;
+          this.$message.error(err.msg);
+        });
+
+
+      // articleService.getArticleList(params)
+      //     .then(res => {
+      //       if (isLoadMore) {
+      //         this.listData = this.listData.concat(res.data.list);
+      //         this.hasNext = res.data.list.length !== 0;
+      //       } else {
+      //         this.listData = res.data.list;
+      //       }
+      //       this.spinning = false;
+      //       this.finish = true;
+      //     })
+      //     .catch(err => {
+      //       this.finish = true;
+      //       this.$message.error(err.msg);
+      //     });
     },
 
     // 获取待审核的文章
     getPendingReviewArticles(params, isLoadMore) {
       if (!isLoadMore) {
-        this.params.currentPage = 1;
+        this.params.pageNum = 1;
       }
       this.finish = false;
       articleService.getPendingReviewArticles(params)
@@ -192,14 +210,14 @@ export default {
           })
           .catch(err => {
             this.finish = true;
-            this.$message.error(err.desc);
+            this.$message.error(err.msg);
           });
     },
 
     // 获取禁用的文章
     getDisabledArticles(params, isLoadMore) {
       if (!isLoadMore) {
-        this.params.currentPage = 1;
+        this.params.pageNum = 1;
       }
       this.finish = false;
       articleService.getDisabledArticles(params)
@@ -215,13 +233,13 @@ export default {
           })
           .catch(err => {
             this.finish = true;
-            this.$message.error(err.desc);
+            this.$message.error(err.msg);
           });
     },
 
     // 刷新列表
     refresh() {
-      this.params = {currentPage: 1, pageSize: 10};
+      this.params = {pageNum: 1, pageSize: 10};
       this.getArticleList(this.params);
     },
 
@@ -267,7 +285,7 @@ export default {
 
     let query = this.$route.query.query;
     this.searchContent = query;
-    this.params.title = query;
+    this.params.postTitle = query;
     this.getArticleList(this.params);
     // 监听滚动，做滚动加载
     this.$utils.scroll.call(this, document.querySelector('#app'));
@@ -279,7 +297,7 @@ export default {
       // 跳转到该页面后需要进行的操作
       let query = this.$route.query.query;
       this.searchContent = query;
-      this.params.title = query;
+      this.params.postTitle = query;
       if (this.$store.state.isManage) {
         if (this.$store.state.articleCheck === "enable") {
           this.getArticleList(this.params);

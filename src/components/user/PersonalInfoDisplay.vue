@@ -5,11 +5,11 @@
       <div class="left">
         <div class="avatar">
           <a-avatar :size="88" class="avatar"
-                    :src="data.picture ? data.picture : require('@/assets/img/default_avatar.png')"/>
+                    :src="data.avatarUrl ? data.avatarUrl : require('@/assets/img/default_avatar.png')"/>
         </div>
         <div class="info" v-if="data.level !== undefined">
           <div class="username">
-            <span>{{ data.name }} </span>
+            <span>{{ data.nickName + " " }} </span>
             <img :src="require('@/assets/img/level/' + data.level + '.svg')" alt=""/>
           </div>
           <div class="office">
@@ -17,32 +17,33 @@
               <i class="iconfont icon-office"></i>
               <span>{{ data.position }}</span>
             </span>
-            <span v-else-if="$store.state.userId === data.id" @click="routerSetUp">
-              <a>
-              <!-- <a-icon type="plus"/> -->
-              <PlusOutlined />
-              {{ $t("common.notJob") }}</a>
-            </span>
+<!--            <span v-else-if="$store.state.userId === data.userId" @click="routerSetUp">-->
+<!--              <a>-->
+<!--              &lt;!&ndash; <a-icon type="plus"/> &ndash;&gt;-->
+<!--              <PlusOutlined />-->
+<!--              {{ $t("common.notJob") }}-->
+<!--              </a>-->
+<!--            </span>-->
           </div>
           <div class="intro">
             <span v-if="data.intro">
               <i class="iconfont icon-intro"></i>
               <span>{{ data.intro }}</span>
             </span>
-            <span v-else-if="$store.state.userId === data.id" @click="routerSetUp">
-              <a><PlusOutlined /> {{ $t("common.notHobbies") }}</a>
-            </span>
+<!--            <span v-else-if="$store.state.userId === data.userId" @click="routerSetUp">-->
+<!--              <a><PlusOutlined /> {{ $t("common.notHobbies") }}</a>-->
+<!--            </span>-->
           </div>
         </div>
       </div>
       <div class="right">
         <div class="link">
-          <a-tooltip placement="left">
-            <template #title>
-              GitHub（开发中...）
-            </template>
-            <i class="iconfont icon-GitHub" style="color: #00000038;"></i>
-          </a-tooltip>
+<!--          <a-tooltip placement="left">-->
+<!--            <template #title>-->
+<!--              GitHub（开发中...）-->
+<!--            </template>-->
+<!--            <i class="iconfont icon-GitHub" style="color: #00000038;"></i>-->
+<!--          </a-tooltip>-->
           <a-tooltip placement="right">
             <template #title>
               个人主页
@@ -51,7 +52,7 @@
           </a-tooltip>
         </div>
         <div class="follow-box">
-          <div class="personalEdit" v-if="$store.state.userId === data.id">
+          <div class="personalEdit" v-if="$store.state.userId === data.userId">
             <a-button class="follow-btn"
                       v-if="!data.isFollow"
                       @click="routerSetUp"
@@ -62,13 +63,13 @@
           <div class="follow" v-else>
             <a-button class="follow-btn"
                       v-if="!data.isFollow"
-                      @click="updateFollowState(data.id)"
+                      @click="updateFollowState(data.userId)"
                       :style="{color: $store.state.themeColor, border: '1px solid' + $store.state.themeColor}">
               {{ $t("common.follow") }}
             </a-button>
             <a-button class="follow-btn-close"
                       v-if="data.isFollow"
-                      @click="updateFollowState(data.id)">
+                      @click="updateFollowState(data.userId)">
               {{ $t("common.haveFollowed") }}
             </a-button>
           </div>
@@ -144,7 +145,7 @@
               this.$emit("refresh");
             })
             .catch(err => {
-              this.$message.error(err.desc);
+              this.$message.error(err.msg);
             });
       },
 

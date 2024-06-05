@@ -83,7 +83,7 @@
         const file = new FormData();
         file.append("picture", this.file);
         this.loading = true;
-        userService.uploadUserPicture(file, this.onUploadProgress.bind(this))
+        userService.updateAvatar(file, this.onUploadProgress.bind(this))
             .then(() => {
               this.$message.success(this.$t("common.uploadSuccessed"));
               this.handleCancel();
@@ -92,7 +92,7 @@
             })
             .catch((err) => {
               this.progress = 0;
-              this.$message.error(err.desc);
+              this.$message.error(err.msg);
               this.loading = false;
             });
       },

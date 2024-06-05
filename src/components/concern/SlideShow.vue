@@ -8,17 +8,15 @@
           class="custom-slick-arrow"
           style="left: 10px;zIndex: 1"
       >
-        <!-- <a-icon type="left-circle"/> -->
         <LeftCircleOutlined />
       </div>
     </template>
     <template #nextArrow>
       <div slot="nextArrow" slot-scope="props" class="custom-slick-arrow" style="right: 10px">
-        <!-- <a-icon type="right-circle"/> -->
         <RightCircleOutlined />
       </div>
     </template>
-    <img :src="item.image" alt="轮播图" v-for="item of carouselData"/>
+    <img :src="item.carouselImg" alt="轮播图" v-for="item of carouselData"/>
   </a-carousel>
 </template>
 
@@ -47,7 +45,7 @@
             })
             .catch(err => {
               this.finish = true;
-              this.$message.error(err.desc);
+              this.$message.error(err.msg);
             });
       },
     },

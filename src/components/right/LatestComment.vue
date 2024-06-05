@@ -39,7 +39,7 @@ export default {
             this.data = res.data.list;
           })
           .catch(err => {
-            this.$message.error(err.desc);
+            this.$message.error(err.msg);
           });
     },
 

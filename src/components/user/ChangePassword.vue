@@ -126,7 +126,7 @@
                 this.handleCancel();
               })
               .catch((err) => {
-                this.$message.error(err.desc);
+                this.$message.error(err.msg);
               });
         });
       },

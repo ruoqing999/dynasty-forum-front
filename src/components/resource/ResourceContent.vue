@@ -109,7 +109,7 @@ export default {
             });
           })
           .catch(err => {
-            this.$message.error(err.desc);
+            this.$message.error(err.msg);
           });
     },
 
@@ -146,7 +146,7 @@ export default {
                   this.refresh();
                 })
                 .catch(err => {
-                  this.$message.error(err.desc);
+                  this.$message.error(err.msg);
                 });
           },
         });

@@ -7,12 +7,12 @@
     <a-divider style="margin: 10px 0 0 0;"/>
     <a-list item-layout="horizontal" :data-source="data" :split="false">
       <template #renderItem="{ item, index }">
-        <a-list-item slot="renderItem" slot-scope="item, index" @click="routerArticleDetail(item.id)">
+        <a-list-item slot="renderItem" slot-scope="item, index" @click="routerArticleDetail(item.postId)">
           <a-list-item-meta
-              :description="item.articleCountDTO.likeCount + ' ' + $t('common.like') +
-              ' · ' + item.articleCountDTO.commentCount + ' ' + $t('common.comment')">
+              :description="item.approves + ' ' + $t('common.like') +
+              ' · ' + item.comments + ' ' + $t('common.comment')">
             <template #title>
-              <span slot="title">{{ item.title }}</span>
+              <span slot="title">{{ item.postTitle }}</span>
             </template>
           </a-list-item-meta>
         </a-list-item>
@@ -23,6 +23,7 @@
 
 <script>
 import articleService from "@/service/articleService";
+import postService from "@/service/postService";
 
 export default {
   props: {
@@ -32,7 +33,7 @@ export default {
   data() {
     return {
       data: [],
-      params: {currentPage: 1, pageSize: 4},
+      params: {pageNum: 1, pageSize: 4},
       finish: false,
     };
   },
@@ -42,14 +43,14 @@ export default {
     getRelatArticleList(params) {
       this.finish = false;
       params.labelIds = this.labelIds.join(',');
-      articleService.getArticleList(params)
+      postService.pagePost(params)
           .then(res => {
             this.data = res.data.list;
             this.finish = true;
           })
           .catch(err => {
             this.finish = true;
-            this.$message.error(err.desc);
+            this.$message.error(err.msg);
           });
     },
 

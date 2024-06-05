@@ -1,23 +1,23 @@
 <template>
   <div class="div-content">
+<!--    <a-row>-->
+<!--      <a-tooltip placement="bottom">-->
+<!--        <template #title>-->
+<!--          {{ $t("common.getTheWord") }}-->
+<!--        </template>-->
+<!--        <a-col class="user_agreement" :span="6" @click="designDocument">{{ $t("common.designDocument") }}</a-col>-->
+<!--      </a-tooltip>-->
+<!--      <a-col class="user_guidance" :span="6">-->
+<!--        <a href="https://www.bilibili.com/video/BV1he4y1C7rk?spm_id_from=333.999.0.0&vd_source=d0a5d07985a7fbbfb889c874632343c6" target="_blank">{{ $t("common.userGuidance") }}</a>-->
+<!--      </a-col>-->
+<!--      <a-col class="links" :span="6">-->
+<!--        <a href="https://juejin.cn/" target="_blank">{{ $t("common.links") }}</a>-->
+<!--      </a-col>-->
+<!--      <a-col class="about_us" :span="6" @click="routerAbout">{{ $t("common.about") }}</a-col>-->
+<!--    </a-row>-->
     <a-row>
-      <a-tooltip placement="bottom">
-        <template #title>
-          {{ $t("common.getTheWord") }}
-        </template>
-        <a-col class="user_agreement" :span="6" @click="designDocument">{{ $t("common.designDocument") }}</a-col>
-      </a-tooltip>
-      <a-col class="user_guidance" :span="6">
-        <a href="https://www.bilibili.com/video/BV1he4y1C7rk?spm_id_from=333.999.0.0&vd_source=d0a5d07985a7fbbfb889c874632343c6" target="_blank">{{ $t("common.userGuidance") }}</a>
-      </a-col>
-      <a-col class="links" :span="6">
-        <a href="https://juejin.cn/" target="_blank">{{ $t("common.links") }}</a>
-      </a-col>
-      <a-col class="about_us" :span="6" @click="routerAbout">{{ $t("common.about") }}</a-col>
-    </a-row>
-    <a-row>
-      版权 © <a href="/" target="_blank"> 南生论坛 </a>丨
-      <a href="https://beian.miit.gov.cn" target="_blank">蜀ICP备19014736号-1 </a>
+      版权 © <a href="/" target="_blank"> 王朝论坛 </a>丨
+      <a href="https://beian.miit.gov.cn" target="_blank">粤ICP备2024226128号-1</a>
     </a-row>
   </div>
 </template>

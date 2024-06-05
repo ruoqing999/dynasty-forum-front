@@ -1,11 +1,11 @@
 <template>
   <div>
     <a-row class="about_nsbbs_img">
-      <img src="@/assets/img/about-nsbbs.png" style="width: 100%;">
+      <img src="@/assets/img/bg1.png" style="width: 100%;">
     </a-row>
     <a-row>
       <a-col :span="24" style="position: relative; top: -25px; text-align: center">
-        <a-avatar :size="80" :src="require('@/assets/img/nan.jpg')"/>
+        <a-avatar :size="80" :src="require('@/assets/img/avatar.png')"/>
       </a-col>
       <a-col :span="24" style="text-align: center">
         <div style="line-height: 28px; padding: 0 10px 10px 10px;">
@@ -16,7 +16,7 @@
       <a-col :span="24" style="text-align: center;display: flex;">
         <a-col :span="6">
           <p>{{ $t("common.article") }}</p>
-          <a-badge :overflow-count="9999999" :count="data.articleCount"
+          <a-badge :overflow-count="9999999" :count="data.postCount"
                    :number-style="{ backgroundColor: $store.state.themeColor }"/>
         </a-col>
         <a-col :span="6">
@@ -26,14 +26,12 @@
         </a-col>
         <a-col :span="6">
           <p>{{ $t("common.visit") }}</p>
-          <a-badge :overflow-count="9999999" :count="data.visitCount"
+          <a-badge :overflow-count="9999999" :count="data.userCount"
                    :number-style="{ backgroundColor: $store.state.themeColor }"/>
         </a-col>
         <a-col :span="6">
           <p>{{ $t("common.carousel") }}</p>
             <a-switch  v-model:checked="this.$store.state.isCarousel" :checkedValue="1"/>
-            <!-- <a-switch @change="carouselSwitch" v-else/> -->
-            <!-- @change="carouselSwitch" v-if="$store.state.isCarousel" -->
         </a-col>
       </a-col>
     </a-row>
@@ -42,7 +40,7 @@
 </template>
 
 <script>
-import articleService from "@/service/articleService";
+import postService from "@/service/postService";
 
 export default {
   props: {},
@@ -53,27 +51,21 @@ export default {
   },
 
   methods: {
-    getArticleCommentVisitTotal() {
-      articleService.getArticleCommentVisitTotal()
-          .then(res => {
-            this.data = res.data;
-          })
-          .catch(err => {
-            this.$message.error(err.desc);
-          });
+
+    getPostCount(){
+      postService.getPostCount()
+        .then(res => {
+          this.data = res.data;
+        })
+        .catch(err => {
+          this.$message.error(err.msg);
+        });
     },
 
-    // 轮播图开关
-    carouselSwitch(checked) {
-      console.log("checked", checked);
-      this.$store.state.isCarousel = checked ? 1 : 0;
-      console.log("this.$store.state.isCarousel", this.$store.state.isCarousel);
-      window.localStorage.isCarousel = checked ? 1 : 0;
-    },
   },
 
   mounted() {
-    this.getArticleCommentVisitTotal();
+    this.getPostCount();
   },
 
 }

@@ -7,11 +7,11 @@
         <div v-if="!spinning">
           <div class="top">
             <div class="left">
-              <a-avatar class="avatar" :size="100" :src="labelData.logo"/>
+              <a-avatar class="avatar" :size="100" :src="labelData.categoryLogo"/>
             </div>
             <div class="right">
-              <div class="title">{{ labelData.labelName }}</div>
-              <div class="meta-article">{{ labelData.articleUseCount + ' ' + $t('common.article') }}</div>
+              <div class="title">{{ labelData.categoryName }}</div>
+              <div class="meta-article">{{ labelData.postCount + ' ' + $t('common.article') }}</div>
             </div>
           </div>
           <div class="bottom">
@@ -35,7 +35,8 @@ import FooterButtons from "@/components/utils/FooterButtons";
 import CustomEmpty from "@/components/utils/CustomEmpty";
 import articleService from "@/service/articleService";
 import FrontPageArticle from "@/components/article/FrontPageArticle";
-import labelService from "@/service/labelService";
+import postService from "@/service/postService";
+import categoryService from "@/service/categoryService";
 
 export default {
   components: {IndexHeader, FrontPageArticle, FooterButtons, CustomEmpty},
@@ -47,7 +48,7 @@ export default {
       listData: [],
       hasNext: true,
       finish: false,
-      params: {currentPage: 1, pageSize: 10},
+      params: {pageNum: 1, pageSize: 10},
       labelData: {},
     };
   },
@@ -55,18 +56,18 @@ export default {
   methods: {
     //加载更多（滚动加载）
     loadMore() {
-      this.params.currentPage++;
+      this.params.pageNum++;
       this.getArticleList(this.params, true);
     },
 
     // 获取文章列表信息
     getArticleList(params, isLoadMore) {
       if (!isLoadMore) {
-        this.params.currentPage = 1;
+        this.params.pageNum = 1;
       }
       this.finish = false;
-      params.labelIds = this.labelId;
-      articleService.getArticleList(params)
+      params.categoryIds = this.labelId;
+      postService.pagePost(params)
           .then(res => {
             if (isLoadMore) {
               this.listData = this.listData.concat(res.data.list);
@@ -79,15 +80,16 @@ export default {
           })
           .catch(err => {
             this.finish = true;
-            this.$message.error(err.desc);
+            this.$message.error(err.msg);
           });
     },
 
     // 获取标签
     getLabelList() {
-      labelService.getLabelList({id: this.labelId, currentPage: 1, pageSize: 10})
+      categoryService.getCategoryList({categoryId: this.labelId})
           .then(res => {
-            this.labelData = res.data.list[0];
+            this.labelData = res.data[0];
+            console.log("zzz", this.labelData)
             // 没有该标签
             if (this.labelData === undefined) {
               this.$router.push({
@@ -98,13 +100,13 @@ export default {
             }
           })
           .catch(err => {
-            this.$message.error(err.desc);
+            this.$message.error(err.msg);
           });
     },
 
     // 刷新列表
     refresh() {
-      this.params = {currentPage: 1, pageSize: 10};
+      this.params = {pageNum: 1, pageSize: 10};
       this.getArticleList(this.params);
     },
   },

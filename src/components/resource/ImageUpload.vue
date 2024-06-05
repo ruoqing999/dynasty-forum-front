@@ -71,7 +71,7 @@ export default {
           })
           .catch(err => {
             this.fileList[0].status = 'error';
-            this.$message.error(err.desc);
+            this.$message.error(err.msg);
           });
     },
 

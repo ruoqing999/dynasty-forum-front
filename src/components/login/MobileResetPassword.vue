@@ -140,7 +140,7 @@
               }
             })
             .catch(err => {
-              this.$message.error(err.desc);
+              this.$message.error(err.msg);
             });
       },
 
@@ -151,7 +151,7 @@
               this.$message.success(this.$t("common.verifyCodeSendSuccessed"));
             })
             .catch(err => {
-              this.$message.error(err.desc);
+              this.$message.error(err.msg);
             });
       },
 
@@ -171,11 +171,11 @@
                     this.$message.success(this.$t("common.pleaseLoginAgain"));
                     this.login();
                   } else {
-                    this.$message.warning(err.desc);
+                    this.$message.warning(err.msg);
                   }
                 })
                 .catch(err => {
-                  this.$message.error(err.desc);
+                  this.$message.error(err.msg);
                 });
           } else {
             return false;

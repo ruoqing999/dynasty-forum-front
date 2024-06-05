@@ -27,21 +27,21 @@
       <div class="tag">
         <a-badge class="info-box"
                  :class="[$store.state.collapsed ? 'badge_style2' : 'badge_style1']"
-                 v-for="item of data" :key="item.id">
+                 v-for="item of data" :key="item.categoryId">
           <div>
-            <a-avatar class="avatar" :size="60" :src="item.logo" @click="routerLabelToArticle(item.id)"/>
+            <a-avatar class="avatar" :size="60" :src="item.categoryLogo" @click="routerLabelToArticle(item.categoryId)"/>
           </div>
-          <div class="title" @click="routerLabelToArticle(item.id)">{{ item.labelName }}</div>
-          <div class="meta-article">{{ item.articleUseCount + ' ' + $t('common.article') }}</div>
-          <a-popover v-model:visible="labelEditVisible[item.id]" :title="$t('common.labelEdit')" trigger="click"
+          <div class="title" @click="routerLabelToArticle(item.categoryId)">{{ item.categoryName }}</div>
+          <div class="meta-article">{{ item.postCount + ' ' + $t('common.article') }}</div>
+          <a-popover v-model:visible="labelEditVisible[item.categoryId]" :title="$t('common.labelEdit')" trigger="click"
                      placement="bottom">
             <template #content>
               <div slot="content" style="width: 500px;">
                 <LabelCreate
                     @hideLabelVisibleFn="hideLabelVisibleFn"
-                    :labelLogoInit="item.logo"
-                    :labelId="item.id"
-                    :labelName="item.labelName"
+                    :labelLogoInit="item.categoryLogo"
+                    :labelId="item.categoryId"
+                    :labelName="item.categoryName"
                     @refresh="refresh"/>
               </div>
             </template>
@@ -50,10 +50,10 @@
           <a-dropdown :trigger="['click']">
             <template #overlay>
               <a-menu>
-                <a-menu-item key="labelEdit" @click="labelUpdateCheck(item.id)">
+                <a-menu-item key="labelEdit" @click="labelUpdateCheck(item.categoryId)">
                   {{ ' ' + $t("common.edit") }}
                 </a-menu-item>
-                <a-menu-item key="labelDel" @click="labelDelete(item.id)">
+                <a-menu-item key="labelDel" @click="labelDelete(item.categoryId)">
                   <span style="color: red">{{ ' ' + $t("common.delete") }}</span>
                 </a-menu-item>
               </a-menu>
@@ -133,7 +133,7 @@ export default {
                   this.refresh();
                 })
                 .catch(err => {
-                  this.$message.error(err.desc);
+                  this.$message.error(err.msg);
                 });
           },
         });

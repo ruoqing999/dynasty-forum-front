@@ -68,8 +68,8 @@
                 return Promise.resolve();
               })
               .catch(err => {
-                // callback(err.desc);
-                return Promise.reject(err.desc);
+                // callback(err.msg);
+                return Promise.reject(err.msg);
               });
         }
       };
@@ -146,7 +146,7 @@
         //           this.$router.go(0);
         //         })
         //         .catch(err => {
-        //           this.$message.error(err.desc);
+        //           this.$message.error(err.msg);
         //         });
         //   // } else {
         //   //   return false;
@@ -159,7 +159,7 @@
             this.$router.go(0);
           })
           .catch(err => {
-            this.$message.error(err.desc);
+            this.$message.error(err.msg);
           });
       },
 

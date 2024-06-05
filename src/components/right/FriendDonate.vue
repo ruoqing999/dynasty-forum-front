@@ -3,9 +3,9 @@
     <header class="user-block-header">{{ $t("common.friendDonate") }}</header>
     <a-divider style="margin: 10px 0 0 0;"/>
     <p>
-      <small class="text-warning">{{ $t("common.donateContent1") }}</small>
+<!--      <small class="text-warning">{{ $t("common.donateContent1") }}</small>-->
       <br>
-      <small class="text-warning">{{ $t("common.donateContent2") }}</small>
+<!--      <small class="text-warning">{{ $t("common.donateContent2") }}</small>-->
     </p>
     <!-- 境外收款 -->
     <div style="line-height: 30px; padding: 0 15px" v-if="$store.state.locale !== 'zh_CN'">
@@ -23,30 +23,31 @@
     <!-- 中文收款码 -->
     <div class="donate" v-else>
       <a-tabs default-active-key="1">
-        <a-tab-pane key="1" tab="随意">
+        <a-tab-pane key="1" tab="😏">
           <!--我是土豪-->
           <div role="tabpanel" class="tab-pane" id="rmb-custom">
-            <img src="http://aid.nanshengbbs.top/default/donate-weixin-custom.png" alt="微信" style="width: 100%">
+<!--            <img src="http://aid.nanshengbbs.top/default/donate-weixin-custom.png" alt="微信" style="width: 100%">-->
+            <img src="https://img.picui.cn/free/2024/06/03/665d36db1dd7b.jpg" alt="微信" style="width: 100%">
           </div>
         </a-tab-pane>
         <a-tab-pane key="2" tab="😏">
           <!--我是土豪-->
           <div role="tabpanel" class="tab-pane" id="rmb-99">
-            <img src="http://aid.nanshengbbs.top/default/donate-weixin-99.png" alt="微信" style="width: 100%">
+            <img src="https://img.picui.cn/free/2024/06/03/665d378a9c466.png" alt="微信" style="width: 100%">
           </div>
         </a-tab-pane>
-        <a-tab-pane key="3" tab="20 元" force-render>
+        <a-tab-pane key="3" tab="战神吕布" force-render>
           <!--20元-->
           <div role="tabpanel" class="tab-pane" id="rmb-20">
-            <img src="http://aid.nanshengbbs.top/default/donate-weixin-20.png" alt="微信" style="width: 100%">
+            <img src="https://img.picui.cn/free/2024/06/03/665d372de6631.png" alt="微信" style="width: 100%">
           </div>
         </a-tab-pane>
-        <a-tab-pane key="4" tab="10 元">
-          <!--10元-->
-          <div role="tabpanel" class="tab-pane active" id="rmb-10">
-            <img src="http://aid.nanshengbbs.top/default/donate-weixin-10.png" alt="微信" style="width: 100%">
-          </div>
-        </a-tab-pane>
+<!--        <a-tab-pane key="4" tab="😏">-->
+<!--          &lt;!&ndash;10元&ndash;&gt;-->
+<!--          <div role="tabpanel" class="tab-pane active" id="rmb-10">-->
+<!--            <img src="http://aid.nanshengbbs.top/default/donate-weixin-10.png" alt="微信" style="width: 100%">-->
+<!--          </div>-->
+<!--        </a-tab-pane>-->
       </a-tabs>
     </div>
   </div>

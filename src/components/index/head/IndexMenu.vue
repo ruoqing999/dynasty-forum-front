@@ -6,7 +6,8 @@
       <!-- 标签 -->
       <a-menu-item key="boilingPoint" @click="routerLabel">{{ $t("common.label") }}</a-menu-item>
       <!-- 资源 -->
-      <a-menu-item key="liveStreaming" @click="routerResource">{{ $t("common.resource") }}</a-menu-item>
+<!--      <a-menu-item key="liveStreaming" @click="routerResource">{{ $t("common.resource") }}</a-menu-item>-->
+<!--      <a-menu-item key="about" @click="routerAbout">{{ $t("common.about") }}</a-menu-item>-->
       <!-- 作者榜 -->
       <a-menu-item key="authorList" @click="routerAuthorList" v-if="$store.state.collapsed">{{ $t("common.authorList") }}</a-menu-item>
       <!-- 最新评论 -->
@@ -14,45 +15,6 @@
       <!-- 写文章 -->
       <a-menu-item key="writeArticle" @click="routerWriteArticle" v-if="$store.state.collapsed">{{ $t("common.writeArticle") }}</a-menu-item>
       <a-divider style="margin: 3px 0 3px 0" v-if="$store.state.collapsed"/>
-      <!-- 管理端 -->
-      <a-menu-item key="management" @click="routerManagement" v-if="$store.state.collapsed">{{ $t("common.management") }}</a-menu-item>
-      <!-- 源码 -->
-      <a-dropdown>
-        <a-menu-item key="course">{{ $t("common.sourceCode") }}</a-menu-item>
-        <template #overlay>
-          <a-menu>
-            <a-menu-item>
-              <a target="_blank" href="https://github.com/maliangnansheng/bbs-springboot">
-                <i class="iconfont icon-GitHub" style="color: #000"></i><b style="color: #000"> {{ $t("common.backEnd") }}</b>{{ $t("common.sourceCode") }}
-              </a>
-            </a-menu-item>
-            <a-menu-item>
-              <a target="_blank" href="https://github.com/maliangnansheng/bbs-vue-ui">
-                <i class="iconfont icon-GitHub" style="color: #000"></i><b style="color: #000"> {{ $t("common.frontEnd") }}</b>{{ $t("common.sourceCode") }}
-              </a>
-            </a-menu-item>
-            <a-divider style="margin: 3px 0 3px 0"/>
-            <a-menu-item>
-              <a target="_blank" href="https://gitee.com/maliangnansheng/bbs-springboot">
-                <i class="iconfont icon-gitee" style="color: #c71d23"></i><b style="color: #000"> {{ $t("common.backEnd") }}</b>{{ $t("common.sourceCode") }}
-              </a>
-            </a-menu-item>
-            <a-menu-item>
-              <a target="_blank" href="https://gitee.com/maliangnansheng/bbs-vue-ui">
-                <i class="iconfont icon-gitee" style="color: #c71d23"></i><b style="color: #000"> {{ $t("common.frontEnd") }}</b>{{ $t("common.sourceCode") }}
-              </a>
-            </a-menu-item>
-          </a-menu>
-        </template>
-      </a-dropdown>
-      <!-- 关于 -->
-      <a-menu-item key="about" @click="routerAbout">{{ $t("common.about") }}</a-menu-item>
-      <!-- 国际化 -->
-      <a-menu-item key="globalization" @click="changeLanguage" v-if="$store.state.collapsed">
-        <!-- <a-icon type="global"/> -->
-        <GlobalOutlined />
-        <span>{{ languageTitle }}</span>
-      </a-menu-item>
     </a-menu>
   </div>
 </template>

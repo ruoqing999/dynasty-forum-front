@@ -50,7 +50,7 @@
               this.data[index].isFollow = !this.data[index].isFollow;
             })
             .catch(err => {
-              this.$message.error(err.desc);
+              this.$message.error(err.msg);
             });
       },
 

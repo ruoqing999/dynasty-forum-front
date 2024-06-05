@@ -49,6 +49,8 @@
 
 <script>
 import articleService from "@/service/articleService";
+import postService from "@/service/postService";
+import userService from "@/service/userService";
 import ArticleBasicInfo from "@/components/article/ArticleBasicInfo";
 import Login from "@/components/login/Login";
 import Register from "@/components/login/Register";
@@ -149,8 +151,8 @@ export default {
       }
       // 第一步.将图片上传到服务器.
       const formData = new FormData();
-      formData.append('picture', $file);
-      articleService.uploadPicture(formData)
+      formData.append('file', $file);
+      userService.uploadImg(formData)
           .then((res) => {
             /**
              * $vm指为mavonEditor实例，可以通过如下两种方式获取
@@ -161,29 +163,30 @@ export default {
             this.$refs.md.$img2Url(pos, res.data);
           })
           .catch(err => {
-            this.$message.error(err.desc);
+            console.log("uploadImg-err", err)
+            this.$message.error(err.msg);
           });
     },
 
     // 获取文章详细信息
     getArticleById() {
-      articleService.getArticleById({id: this.$route.params.id})
-          .then(res => {
-            this.articleUser = res.data.createUser;
+      postService.detail({postId: this.$route.params.id})
+            .then(res => {
+            this.articleUser = res.data.userId;
             if (this.$store.state.userId !== this.articleUser) {
               this.$message.warning("你无权编辑他人撰写的文章");
               return;
             }
             // 标题
-            this.articleTitle = res.data.title;
+            this.articleTitle = res.data.postTitle;
             // 内容
-            this.markdownCode = res.data.markdown;
+            this.markdownCode = res.data.rawContent;
             // 标签
-            res.data.labelDTOS.forEach((item) => {
-              this.articleLabel.push(item.id);
+            res.data.categoryVOS.forEach((item) => {
+              this.articleLabel.push(item.categoryId);
             })
             // 题图
-            this.articleTitleMap = res.data.titleMap;
+            this.articleTitleMap = res.data.postImg;
           })
           .catch(err => {
             // 没有该文章
@@ -194,7 +197,7 @@ export default {
                 params: { pathMatch: this.$route.path.substring(1).split('/') },
               })
             } else {
-              this.$message.error(err.desc);
+              this.$message.error(err.msg);
             }
           });
     },

@@ -9,7 +9,7 @@
             <template #title>
               <span class="username" slot="title">
                 <span style="padding-right: 2px;">{{ item.name }}</span>
-                <img :src="require('@/assets/img/level/' + item.level + '.svg')" alt="" @click.stop="routerBook"/>
+<!--                <img :src="require('@/assets/img/level/' + item.level + '.svg')" alt="" @click.stop="routerBook"/>-->
               </span>
             </template>
             <template #avatar>
@@ -55,19 +55,19 @@ export default {
           })
           .catch(err => {
             this.finish = true;
-            this.$message.error(err.desc);
+            this.$message.error(err.msg);
           });
     },
 
     recommended() {
-      let routeData = this.$router.resolve("/recommended");
-      window.open(routeData.href, '_blank');
+      // let routeData = this.$router.resolve("/recommended");
+      // window.open(routeData.href, '_blank');
     },
 
     // 路由到用户中心页面
     routerUserCenter(userId) {
-      let routeData = this.$router.resolve("/user/" + userId);
-      window.open(routeData.href, '_blank');
+      // let routeData = this.$router.resolve("/user/" + userId);
+      // window.open(routeData.href, '_blank');
     },
 
     // 路由到Book说明页面

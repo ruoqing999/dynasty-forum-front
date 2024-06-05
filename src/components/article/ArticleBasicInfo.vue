@@ -1,27 +1,27 @@
 <template>
   <div id="article-basic-info">
-    <a-form :model="form" ref="form" :rules="rules" :label-col="{ span: 5 }" :wrapper-col="{ span: 17 }" >
+    <a-form :model="form" ref="form" :rules="rules" :label-col="{ span: 5 }" :wrapper-col="{ span: 17 }">
       <!-- 添加标签 -->
-      <a-form-item :label="$t('common.addLabel')" name="lableId">
+      <a-form-item :label="$t('common.addLabel')" name="categoryId">
         <a-select mode="multiple"
-          v-model:value="form.lableId"
+                  v-model:value="form.categoryId"
                   :placeholder="$t('common.selectLabel')"
                   @change="handleSelectChange">
-          <a-select-option v-for="item of listData" :key="item.id">
-            {{ item.labelName }}
+          <a-select-option v-for="item of listData" :key="item.categoryId">
+            {{ item.categoryName }}
           </a-select-option>
         </a-select>
       </a-form-item>
       <!-- 文章封面 -->
       <a-form-item :label="$t('common.articleCover')">
         <UploadImage
-            :articleTitleMap="articleTitleMap"
-            @titleMap="titleMap"/>
+          :articleTitleMap="articleTitleMap"
+          @titleMap="titleMap" />
       </a-form-item>
       <a-divider style="margin: 10px 0;"></a-divider>
       <a-form-item class="form-item-submit">
         <a-button type="primary" @click="handleSubmit">
-          {{ $route.params.id ? $t('common.sureAndUpdate') : $t('common.sureAndRelease') }}
+          {{ $route.params.id ? $t("common.sureAndUpdate") : $t("common.sureAndRelease") }}
         </a-button>
       </a-form-item>
     </a-form>
@@ -31,23 +31,25 @@
 <script>
 import labelService from "@/service/labelService";
 import articleService from "@/service/articleService";
+import categoryService from "@/service/categoryService";
 import UploadImage from "@/components/article/UploadImage";
+import postService from "@/service/postService";
 
 export default {
-  components: {UploadImage},
+  components: { UploadImage },
 
   props: {
     // 文章创建者
-    articleUser: {type: Number, default: 0},
+    articleUser: { type: Number, default: 0 },
     // 文章标签
-    articleLabel: {type: Array, default: []},
+    articleLabel: { type: Array, default: [] },
     // 题图
-    articleTitleMap: {type: String, default: ""},
+    articleTitleMap: { type: String, default: "" },
     // 文章标题
-    articleTitle: {type: String, default: ""},
+    articleTitle: { type: String, default: "" },
     // 文章内容
-    markdownCode: {type: String, default: ""},
-    htmlCode: {type: String, default: ""},
+    markdownCode: { type: String, default: "" },
+    htmlCode: { type: String, default: "" }
   },
 
   data() {
@@ -56,8 +58,8 @@ export default {
       articleFile: null,
       // 标签
       listData: [],
-      params: {currentPage: 1, pageSize: 10},
-      form:  {},
+      params: { currentPage: 1, pageSize: 10 },
+      form: {},
       // 表单验证
       // validatorRules: {
       //   label: {
@@ -69,9 +71,9 @@ export default {
       //   }
       // },
       rules: {
-        lableId: [{ required: true, message: this.$t('common.selectLabel') }],
-      },
-    }
+        categoryId: [{ required: true, message: this.$t("common.selectLabel") }]
+      }
+    };
   },
 
   methods: {
@@ -94,40 +96,20 @@ export default {
         return;
       }
 
-      // this.form.validateFields((err, values) => {
-      //   if (!err) {
-      //     const data = new FormData();
-      //     data.append("file", this.articleFile);
-      //     data.append("title", this.articleTitle);
-      //     data.append("markdown", this.markdownCode);
-      //     data.append("html", this.htmlCode);
-      //     data.append("labelIds", values.lableId);
-      //     // 地址栏有值（更新文章）才调用
-      //     let articleId = this.$route.params.id;
-      //     if (articleId) {
-      //       data.append("id", articleId);
-      //       this.articleUpdate(data);
-      //     } else {
-      //       this.articleCreate(data);
-      //     }
-      //   }
-      // });
       this.$refs.form.validateFields().then(values => {
         // Do something with value
         const data = new FormData();
         data.append("file", this.articleFile);
-        data.append("title", this.articleTitle);
-        data.append("markdown", this.markdownCode);
-        data.append("html", this.htmlCode);
-        data.append("labelIds", this.form.lableId);
+        data.append("postTitle", this.articleTitle);
+        data.append("rawContent", this.markdownCode);
+        data.append("postContent", this.htmlCode);
+        data.append("categoryIds", this.form.categoryId);
         // 地址栏有值（更新文章）才调用
         let articleId = this.$route.params.id;
         if (articleId) {
-          data.append("id", articleId);
-          this.articleUpdate(data);
-        } else {
-          this.articleCreate(data);
+          data.append("postId", articleId);
         }
+        this.post(data);
       });
     },
 
@@ -139,60 +121,43 @@ export default {
     },
 
     getLabelList(params) {
-      labelService.getLabelList(params)
-          .then(res => {
-            this.listData = res.data.list;
-          })
-          .catch(err => {
-            this.$message.error(err.desc);
-          });
+      categoryService.getCategoryList(params)
+        .then(res => {
+          this.listData = res.data;
+        })
+        .catch(err => {
+          this.$message.error(err.msg);
+        });
     },
 
-    // 写文章
-    articleCreate(data) {
-      articleService.articleCreate(data)
-          .then(res => {
-            this.$router.push("/user/" + this.$store.state.userId + "/article");
-          })
-          .catch(err => {
-            this.$message.error(err.desc);
-          });
-    },
-
-    // 更新文章
-    articleUpdate(data) {
-      if (this.$store.state.userId !== this.articleUser) {
-        this.$message.warning("你无权编辑他人撰写的文章");
-        return;
-      }
-      articleService.articleUpdate(data)
-          .then(res => {
-            // 返回上一页
-            this.$router.go(-1);
-          })
-          .catch(err => {
-            this.$message.error(err.desc);
-          });
+    post(data) {
+      postService.post(data)
+        .then(res => {
+          this.$router.push("/user/" + this.$store.state.userId + "/article");
+        })
+        .catch(err => {
+          console.log("post-err", err)
+          this.$message.error(err.msg);
+        });
     },
 
     titleMap(file) {
       this.articleFile = file;
-    },
+    }
   },
 
   mounted() {
-    this.params.pageSize = 100;
-    this.getLabelList(this.params);
+    this.getLabelList();
     // v-mode和v-decorator冲突问题解决方案
     // this.form.setFieldsValue({
     //   lableId: this.articleLabel,
     // })
 
     this.form = {
-      lableId: this.articleLabel,
+      categoryId: this.articleLabel
     };
   }
-}
+};
 </script>
 
 <style>

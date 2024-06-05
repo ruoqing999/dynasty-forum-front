@@ -25,25 +25,26 @@ export default {
     ...mapMutations(["changeColor"]),
     // 初始化获取用户权限状态
     getAccess() {
-      userService.getCurrentUserAccess()
+      userService.getUserInfo()
           .then(res => {
             /**
              * @function checkErrorPage 判断当前是否在500页面刷新，如果是，刷新后如果返回{code: 200},则跳转到首页
              */
             this.checkErrorPage(res);
-            if (res.code === 0) {
+            if (res.code === 200) {
               this.$store.state.userId = res.data.userId;
               this.$store.state.isLogin = true;
-              res.data.roles.forEach(data => {
-                // 是超级管理员
-                if (data.grade === 'NS_SUPER_ADMIN_ROLE') {
-                  this.$store.state.isManage = true;
-                }
-              })
+              this.$store.state.picture = res.data.avatarUrl;
+              // res.data.roles.forEach(data => {
+              //   // 是超级管理员
+              //   if (data.grade === 'NS_SUPER_ADMIN_ROLE') {
+              //     this.$store.state.isManage = true;
+              //   }
+              // })
             }
           })
           .catch((err) => {
-            // this.$message.error(err.desc);
+            // this.$message.error(err.msg);
           });
     },
     // 初始化页面。获取屏幕尺寸以及监听屏幕尺寸
@@ -76,7 +77,7 @@ export default {
       if (navigator.language === "zh-CN") {
         navLanguage = "zh_CN";
       } else {
-        navLanguage = "en_US";
+        navLanguage = "zh_CN";
       }
       this.$store.state.locale = localStorage.language ? localStorage.language : navLanguage;
       this.changeColor(localStorage.themeColor || "#13c2c2");

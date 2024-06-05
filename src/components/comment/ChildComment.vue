@@ -1,16 +1,16 @@
 <template>
   <div id="child-comment">
-    <a-comment :id="'reply-' + data.id">
+    <a-comment :id="'reply-' + data.commentId">
       <template #author>
-        <a class="username" slot="author" @click="routerUserCenter(data.commentUser)">
-          {{ data.commentUserName }}
+        <a class="username" slot="author" @click="routerUserCenter(data.userId)">
+          {{ data.nickName + " " }}
           <img :src="require('@/assets/img/level/' + (data.level?data.level:'Lv1') + '.svg')" alt="" @click.stop="routerBook"/>
           <small class="time" slot="title" style="color: #b5b9b9" v-text="$utils.showtime(data.createTime)"></small>
         </a>
       </template>
       <template #avatar>
-        <a-avatar slot="avatar" :src="data.picture ? data.picture : require('@/assets/img/default_avatar.png')"
-                @click="routerUserCenter(data.commentUser)"/>
+        <a-avatar slot="avatar" :src="data.avatar ? data.avatar : require('@/assets/img/default_avatar.png')"
+                @click="routerUserCenter(data.userId)"/>
       </template>
       <template #content>
         <p class="comment-content" slot="content">
@@ -19,13 +19,13 @@
 <!--              @click="deleteComment(data.id)">{{ $t("common.delete") }}</span>-->
       </p>
         <span slot="content">
-          <a class="operate comment-like">
-            <i class="iconfont icon-like" @click="likeCommentAction(data.id)"
-              :style="data.isLike ? 'color:' + $store.state.themeColor : 'color: #8a919f;'">
-              <small> {{ data.likeCount === 0 ? '' : data.likeCount }}</small>
-            </i>
-          </a>
-          <a class="operate comment-comment" v-if="data.depth < 2" @click="isShowFn(data.id)">
+<!--          <a class="operate comment-like">-->
+<!--            <i class="iconfont icon-like" @click="likeCommentAction(data.commentId)"-->
+<!--              :style="data.isLike ? 'color:' + $store.state.themeColor : 'color: #8a919f;'">-->
+<!--              <small> {{ data.likeCount === 0 ? '' : data.likeCount }}</small>-->
+<!--            </i>-->
+<!--          </a>-->
+          <a class="operate comment-comment" v-if="data.depth < 2" @click="isShowFn(data.commentId)">
             <i class="iconfont icon-comment" style="color: #8a919f;">
               <small v-if="isShow"> {{ $t("common.cancelReply") }}</small>
               <small v-else> {{ $t("common.reply") }}</small>
@@ -33,11 +33,11 @@
             </i>
           </a>
           <!-- 自己的评论 or 自己的文章  都可以删除对应评论信息 -->
-          <b v-if="data.commentUser === $store.state.userId || articleUserId === $store.state.userId">
+          <b v-if="data.userId === $store.state.userId || articleUserId === $store.state.userId">
             <a-dropdown :placement="'bottomCenter'" :trigger="['click']">
               <template #overlay>
                 <a-menu>
-                  <a-menu-item key="delete" @click="deleteComment(data.id)">
+                  <a-menu-item key="delete" @click="deleteComment(data.commentId)">
                     <span style="color: red">{{ ' ' + $t("common.delete") }}</span>
                   </a-menu-item>
                 </a-menu>
@@ -96,7 +96,7 @@ export default {
             this.$emit("getCommentByArticleId");
           })
           .catch(err => {
-            this.$message.error(err.desc);
+            this.$message.error(err.msg);
           });
     },
 
@@ -127,7 +127,7 @@ export default {
                 this.$emit("getCommentByArticleId");
               })
               .catch((err) => {
-                this.$message.error(err.desc);
+                this.$message.error(err.msg);
               });
         },
       });

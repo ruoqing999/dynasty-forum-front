@@ -5,7 +5,7 @@
     <MenuFoldOutlined  v-if="$store.state.collapsed && collapsed " @click="toggleCollapsed"/>
     <MenuUnfoldOutlined  v-else-if="$store.state.collapsed && !collapsed" v-if="$store.state.collapsed" @click="toggleCollapsed"/>
     <a-drawer
-        title="Nan's BBS"
+        title="王朝霸域论坛"
         placement="left"
         :closable="false"
         :visible="visible"

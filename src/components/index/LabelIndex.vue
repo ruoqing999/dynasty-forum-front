@@ -19,6 +19,7 @@
   import CustomEmpty from "@/components/utils/CustomEmpty";
   import LabelContent from "@/components/label/LabelContent";
   import labelService from "@/service/labelService";
+  import categoryService from "@/service/categoryService";
 
   export default {
     components: {IndexHeader, LabelContent, FooterButtons, CustomEmpty},
@@ -36,8 +37,8 @@
     methods: {
       //加载更多（滚动加载）
       loadMore() {
-        this.params.currentPage++;
-        this.getLabelList(this.params, true);
+        // this.params.currentPage++;
+        // this.getLabelList(this.params, true);
       },
 
       // 获取标签
@@ -45,19 +46,20 @@
         if (!isLoadMore) {
           this.params.currentPage = 1;
         }
-        labelService.getLabelList(params)
+        categoryService.getCategoryList(params)
             .then(res => {
               if (isLoadMore) {
-                this.listData = this.listData.concat(res.data.list);
+                // this.listData = this.listData.concat(res.data);
               } else {
-                this.listData = res.data.list;
+                this.listData = res.data;
               }
               this.finish = true;
-              this.hasNext = res.data.list.length !== 0;
+              this.hasNext = res.data.length !== 0;
             })
             .catch(err => {
+              console.log("err",err)
               this.finish = true;
-              this.$message.error(err.desc);
+              this.$message.error(err.msg);
             });
       },
 
@@ -66,7 +68,7 @@
         this.searchContent = labelName;
         this.params = {currentPage: 1, pageSize: 25};
         if (labelName) {
-          this.params.labelName = labelName;
+          this.params.categoryName = labelName;
         }
         this.getLabelList(this.params);
       },
