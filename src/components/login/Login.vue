@@ -99,22 +99,22 @@ export default {
       thirdLoginService.qqLogin()
         .then(res => {
 
-          this.$store.state.setToken(res.data)
-          this.$router.go(0);
+          // this.$store.state.setToken(res.data)
+          // this.$router.go(0);
 
-          // if (res.code === 200) {
-          //   //获得窗口的垂直位置
-          //   const iTop = (window.screen.availHeight - 30 - 600) / 2;
-          //   //获得窗口的水平位置
-          //   const iLeft = (window.screen.availWidth - 10 - 600) / 2;
-          //   window.open(res.data, "_blank", "height=600, width=600, top=" + iTop + ", left=" + iLeft + ", toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no")
-          //   addEventListener('message', e => {
-          //     if (e.origin === 'https://wcby.ruoqing.club') {
-          //       this.$store.state.setToken(e.data)
-          //       this.$router.go(0);
-          //     }
-          //   })
-          // }
+          if (res.code === 200) {
+            //获得窗口的垂直位置
+            const iTop = (window.screen.availHeight - 30 - 600) / 2;
+            //获得窗口的水平位置
+            const iLeft = (window.screen.availWidth - 10 - 600) / 2;
+            window.open(res.data, "_blank", "height=600, width=600, top=" + iTop + ", left=" + iLeft + ", toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no")
+            addEventListener('message', e => {
+              if (e.origin === 'https://wcby.ruoqing.club') {
+                this.$store.state.setToken(e.data)
+                this.$router.go(0);
+              }
+            })
+          }
         })
         .catch(err => {
           console.log("error", err);

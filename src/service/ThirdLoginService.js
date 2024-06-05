@@ -4,7 +4,7 @@ export default {
   // qq登录
   qqLogin(params) {
     return new Promise((resolve, reject) => {
-      axios.get("/api/auth/qqLogin", {params})
+      axios.get("/api/auth/qqUrl", {params})
         .then((res) => resolve(res))
         .catch((err) => reject(err));
     });
