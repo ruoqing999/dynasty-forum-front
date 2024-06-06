@@ -156,6 +156,8 @@ export default {
     required: "Can not be empty！",
     inDevelopment: "In development...",
     home: "Home",
+    equipmentAttribute: 'Equipment Attribute',
+    unifyStrategy: 'Unify Strategy',
     label: "Label",
     course: "Course",
     resource: "Resource",

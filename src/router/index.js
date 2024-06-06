@@ -58,6 +58,16 @@ const routes = [
         component: () => import("@/components/index/LabelIndex"),
     },
     {
+      path: "/equipmentAttribute",
+      name: "equipmentAttribute",
+      component: () => import("@/components/index/EquipmentAttributeIndex"),
+    },
+    {
+      path: "/unifyStrategy",
+      name: "unifyStrategy",
+      component: () => import("@/components/index/UnifyStrategyIndex.vue"),
+    },
+    {
         path: "/label/:id",
         component: () => import("@/components/index/LabelToArticleIndex"),
     },

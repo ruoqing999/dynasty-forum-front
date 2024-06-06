@@ -3,6 +3,13 @@
     <a-menu v-model:selectedKeys="current" :mode="$store.state.collapsed ? 'inline' : 'horizontal'" style="min-width:500px">
       <!-- 首页 -->
       <a-menu-item key="frontPage" @click="refresh">{{ $t("common.home") }}</a-menu-item>
+
+      <!-- 装备属性 -->
+      <a-menu-item key="equipmentAttribute" @click="routerEquipmentAttribute">{{ $t("common.equipmentAttribute") }}</a-menu-item>
+
+      <!-- 一统攻略 -->
+      <a-menu-item key="unifyStrategy" @click="routerUnifyStrategy">{{ $t("common.unifyStrategy") }}</a-menu-item>
+
       <!-- 标签 -->
       <a-menu-item key="boilingPoint" @click="routerLabel">{{ $t("common.label") }}</a-menu-item>
       <!-- 资源 -->
@@ -64,6 +71,14 @@
       routerLabel() {
         this.$router.push("/label");
       },
+      // 路由到装备属性页面
+      routerEquipmentAttribute() {
+        this.$router.push("/equipmentAttribute");
+      },
+      // 路由到一统攻略页面
+      routerUnifyStrategy() {
+        this.$router.push("/unifyStrategy");
+      },
 
       // 路由到资源导航页面
       routerResource() {
@@ -110,6 +125,16 @@
       if (name === 'label') {
         // 添加新值
         this.current.push('boilingPoint');
+      }
+      // 装备属性
+      if (name === 'equipmentAttribute') {
+        // 添加新值
+        this.current.push('equipmentAttribute');
+      }
+      // 一统攻略
+      if (name === 'unifyStrategy') {
+        // 添加新值
+        this.current.push('unifyStrategy');
       }
       // 资源导航
       if (name === 'resource') {
