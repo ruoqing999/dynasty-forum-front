@@ -70,6 +70,8 @@
 
       // 刷新列表
       refresh(labelName) {
+        this.finish = false
+        this.listData = []
         console.log(labelName);
         this.searchContent = labelName;
         this.params = {pageNum: 1, pageSize: 25};
